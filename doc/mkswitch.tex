@@ -90,7 +90,7 @@ Two set of commands are created, one to be used in a \tsobj[pkg]{expl3} code ré
 \begin{codesyntax}%
 \tsobj{\mkswitch} \tsmeta{switch} \tsargs[marg]{default-code}
 \end{codesyntax}
-It will create a new switch \tsobj[marg]{switch}, which will expects a single argument. In case the argument doesn't corresponds to any defined case, \tsobj[marg]{default-code} will be used. The resulting \tsobj[marg]{switch} command is expandable. This is just an alias to \tsobj{\switch_new:Nn}
+It will create a new switch \tsobj[marg]{switch}, which will expects a single argument. In case the argument doesn't corresponds to any defined case, \tsobj[marg]{default-code} will be used. The resulting \tsobj[marg]{switch} command is expandable, if \tsobj[marg]{default-code} and \tsobj[marg]{case-code} (added by \tsobj{\addcase}) also are. This is just an alias to \tsobj{\switch_new:Nn}
 \end{codedescribe}
 \begin{tsremark}
   \verb|#1| can be used in \tsobj[marg]{default-code}.
@@ -98,9 +98,9 @@ It will create a new switch \tsobj[marg]{switch}, which will expects a single ar
 
 \begin{codedescribe}{\addcase}
 \begin{codesyntax}%
-\tsobj{\addcase} \tsmeta{switch} \tsargs[marg]{case,code}
+\tsobj{\addcase} \tsmeta{switch} \tsargs[marg]{case,case-code}
 \end{codesyntax}
-It will add a \tsobj[marg]{case} to a previously defined \tsmeta{switch} and associates \tsobj[marg]{code} with it. \tsobj[marg]{case} will be fully expanded at definition time. Once defined one can call \tsverb[verb]{\switch{case}}, which will put said \tsobj[marg]{code} in the input stream.   This is just an alias to \tsobj{\switch_addcase:Nnn}.
+It will add a \tsobj[marg]{case} to a previously defined \tsmeta{switch} and associates \tsobj[marg]{case-code} with it. \tsobj[marg]{case} will be fully expanded at definition time. Once defined one can call \tsverb[verb]{\switch{case}}, which will put said \tsobj[marg]{case-code} in the input stream.   This is just an alias to \tsobj{\switch_addcase:Nnn}.
 \end{codedescribe}
 
 \subsubsection{Example}
@@ -128,10 +128,9 @@ if someothermacro: \myCase{\someothermacro}
 \tscode*[mkswitch]{switch02}[1]
 \tsexec{switch02}[1]
 
-To use the \tsargs[marg]{switch}, one just has to call it with \tsobj[marg]{case} as an argument. Note the possibility of using an auxiliary macro/command (which has to be fully expandable) as a \tsobj[marg]{case}.
+To use the \tsobj[marg]{switch}, one just has to call it with \tsobj[marg]{case} as an argument. Note the possibility of using an auxiliary macro/command (which has to be fully expandable) as a \tsobj[marg]{case}.
 
 \tsdemo[mkswitch]{switch02}[2]
-
 
 
 \subsection{Expl3 ones}
@@ -139,7 +138,7 @@ To use the \tsargs[marg]{switch}, one just has to call it with \tsobj[marg]{case
 \begin{codesyntax}%
 \tsobj{\switch_new:Nn} \tsmeta{switch} \tsargs[marg]{default-code}
 \end{codesyntax}
-It will create a new switch \tsobj[marg]{switch}, which will expects a single, type n, argument. In case the argument doesn't corresponds to any defined case, \tsobj[marg]{default-code} will be used. The resulting \tsobj[marg]{switch} command is expandable. 
+It will create a new switch \tsobj[marg]{switch}, which will expects a single, type n, argument. In case the argument doesn't corresponds to any defined case, \tsobj[marg]{default-code} will be used. The resulting \tsobj[marg]{switch} command is expandable, if \tsobj[marg]{default-code} and \tsobj[marg]{case-code} (added by \tsobj{\switch_addcase:Nnn}) also are. 
 \end{codedescribe}
 \begin{tsremark}
   \verb|#1| can be used in \tsobj[marg]{default-code}.
@@ -147,9 +146,9 @@ It will create a new switch \tsobj[marg]{switch}, which will expects a single, t
 
 \begin{codedescribe}{\switch_addcase:Nnn}
 \begin{codesyntax}%
-\tsobj{\switch_addcase:Nn} \tsmeta{switch} \tsargs[marg]{case,code}
+\tsobj{\switch_addcase:Nnn} \tsmeta{switch} \tsargs[marg]{case,case-code}
 \end{codesyntax}
-It will add a \tsobj[marg]{case} to a previously defined \tsmeta{switch} and associates \tsobj[marg]{code} with it. \tsobj[marg]{case} will be fully expanded at definition time. Once defined one can call \tsverb[verb]{\switch{case}}, which will put said \tsobj[marg]{code} in the input stream. 
+It will add a \tsobj[marg]{case} to a previously defined \tsmeta{switch} and associates \tsobj[marg]{case-code} with it. \tsobj[marg]{case} will be fully expanded at definition time. Once defined one can call \tsverb[verb]{\switch{case}}, which will put said \tsobj[marg]{case-code} in the input stream. 
 \end{codedescribe}
 
 
@@ -181,9 +180,7 @@ if someothermacro: \TextCase{\someothermacro}
 \tscode*[mkswitch]{switch01}[1]
 \tsexec{switch01}[1]
 
-
-
-To use the \tsargs[marg]{switch}, one just has to call it with \tsobj[marg]{case} as an argument. Note the possibility of using an auxiliary macro/command (which has to be fully expandable) as a \tsobj[marg]{case}.
+To use the \tsobj[marg]{switch}, one just has to call it with \tsobj[marg]{case} as an argument. Note the possibility of using an auxiliary macro/command (which has to be fully expandable) as a \tsobj[marg]{case}.
 
 \tsdemo[mkswitch]{switch01}[2]
 
