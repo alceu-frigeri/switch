@@ -1,13 +1,10 @@
-<PackageNAME>
+mkswitch
 ==========
 
-Template for LaTeX packages ...
-
-<PackageDescription>
+A constant time/expandable switch/case
 
 For more details,  see the documentation,
-[<PackageNAME>.pdf](http://mirrors.ctan.org/macros/latex/contrib/<PackageNAME>/doc/<PackageNAME>.pdf)
-[<PackageNAME>.pdf](http://mirrors.ctan.org/graphics/pgf/contrib/<PackageNAME>/doc/<PackageNAME>.pdf)
+[mkswitch.pdf](http://mirrors.ctan.org/macros/latex/contrib/mkswitch/doc/mkswitch.pdf)
 	
 --------------
 
@@ -16,13 +13,13 @@ For more details,  see the documentation,
 (with the new in kernel *\ProcessKeyOptions* and *\NewDocumentCommand*).
 
 ## Installation
-The stable version is available at [CTAN](https://ctan.org/pkg/<PackageNAME>).
+The stable version is available at [CTAN](https://ctan.org/pkg/mkswitch).
 
 ## Usage
 ### Stable version
 Just place
 ```latex
-  \usepackage{<PackageNAME>}
+  \usepackage{mkswitch}
 ```
 
 in the preamble and compile away.
@@ -30,12 +27,12 @@ in the preamble and compile away.
 ## Contacting Author
 
 For bug reports and enhancement suggestions, the preferred way is to use
-[the project's issue page](https://github.com/alceu-frigeri/<PackageNAME>/issues).
+[the project's issue page](https://github.com/alceu-frigeri/mkswitch/issues).
 Please be ready to provide an example code showing the bug, if any.
 
 Please do not use the issue page for generic help on how to use the package.
 
-* git: https://github.com/alceu-frigeri/<PackageNAME>
+* git: https://github.com/alceu-frigeri/mkswitch
 
 -------------
 Copyright 2025-present by Alceu Frigeri
@@ -53,15 +50,17 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 ## This work consist of the files
 
-* <PackageNAME>.sty
+* mkswitch.sty
     - the package itself
 
 * README.md  (this file)
     - quick introduction
 
-* <PackageNAME>.tex
+* mkswitch.tex
+* mkswitch.bib
     - package documentation
-* <PackageNAME>.pdf
+    
+* mkswitch.pdf
     - documentation in PDF format
     
 -------------

@@ -1,0 +1,196 @@
+%%%==============================================================================
+% WinEdt pragmas
+% !Mode:: "TeX:EN"
+% Default Compile engines:
+% !TEX program = pdflatex
+% !PDFTeXify ext =  --enable-etex  --restrict-write18
+% !PDFLaTeX ext  =  --enable-etex  --restrict-write18
+% !BIB program = biber
+%%%==============================================================================
+%% Copyright 2025-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2025/05/11}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/mkswitch
+%%
+%%%==============================================================================
+\documentclass[10pt]{article}
+\RequirePackage[verbose,a4paper,marginparwidth=27.5mm,top=2.5cm,bottom=1.5cm,hmargin={40mm,20mm},marginparsep=2.5mm,columnsep=10mm,asymmetric]{geometry}
+\usepackage{codedescribe}
+\RequirePackage[inline]{enumitem}
+\SetEnumitemKey{miditemsep}{parsep=0ex,itemsep=0.4ex}
+
+%%\usepackage[american,siunitx,cuteinductors,smartlabels,arrowmos,EFvoltages,betterproportions]{circuitikz}
+%%\usetikzlibrary{math}
+
+\usepackage{mkswitch}
+
+\RequirePackage[backend=biber]{biblatex}
+\addbibresource{mkswitch.bib}
+
+\RequirePackage[hidelinks,hypertexnames=false]{hyperref}
+
+
+\begin{document}
+\tstitle{
+  author={Alceu Frigeri\footnote{\tsverb{https://github.com/alceu-frigeri/mkswitch}}},
+  date={\tsdate},
+  title={The mkswitch Package\break Version \PkgInfo{mkswitch}{version}}
+  }
+  
+
+\begin{typesetabstract}
+ 
+This package offers two commands aimed at implementing a switch/case alike command.
+\end{typesetabstract}
+
+\tableofcontents
+
+\section{Introduction}
+There are many ways of implementing a switch case programming structure. Notably, one can use \tsobj{\str_case:nn} from \tsobj[pkg]{expl3}, or go over a loop using \tsobj{\pdfstrcmp}, or construct an if-then-else tower, etc.
+
+This implements a solution, somewhat based on  \cite{stackexchage:switchcase}, which (besides being simple) has the advantage of being constant time: once the cases are set up, suffice a single (internal) if (\tsobj{\ifcsname}) to select the correct code to be executed. 
+
+
+
+\begin{tsremark}
+  The implementation creates a \tsobj{\csname} for each case, and it uses (at the end) the primitive \tsobj{\ifcsname} to select the correct case.
+\end{tsremark}
+\begin{tsremark}
+  The coding is done using \tsobj[pkg]{expl3}, just for the sake of making it more ``readable'', in the package comments one can find an implementation using just \TeX\  primitives.
+\end{tsremark}
+
+\setnewcodekey {mkswitch} 
+  {
+    keywd2={switch,new,addcase,mkswitch,addcase},
+    emph={TextCase,myCase},
+    emph2={CaseAstring},
+    codeprefix={},
+    resultprefix={}
+  }
+
+
+\section{Commands}
+Two set of commands are created, one to be used in a \tsobj[pkg]{expl3} code régime, and another set to be used in a user document.
+
+\subsection{User Document ones}
+\begin{codedescribe}{\mkswitch}
+\begin{codesyntax}%
+\tsobj{\mkswitch} \tsmeta{switch} \tsargs[marg]{default-code}
+\end{codesyntax}
+It will create a new switch \tsobj[marg]{switch}, which will expects a single argument. In case the argument doesn't corresponds to any defined case, \tsobj[marg]{default-code} will be used. The resulting \tsobj[marg]{switch} command is expandable. This is just an alias to \tsobj{\switch_new:Nn}
+\end{codedescribe}
+\begin{tsremark}
+  \verb|#1| can be used in \tsobj[marg]{default-code}.
+\end{tsremark}
+
+\begin{codedescribe}{\addcase}
+\begin{codesyntax}%
+\tsobj{\addcase} \tsmeta{switch} \tsargs[marg]{case,code}
+\end{codesyntax}
+It will add a \tsobj[marg]{case} to a previously defined \tsmeta{switch} and associates \tsobj[marg]{code} with it. \tsobj[marg]{case} will be fully expanded at definition time. Once defined one can call \tsverb[verb]{\switch{case}}, which will put said \tsobj[marg]{code} in the input stream.   This is just an alias to \tsobj{\switch_addcase:Nnn}.
+\end{codedescribe}
+
+\subsubsection{Example}
+
+First we create a switch, and associate a few (or more) cases. Note the possibility of using an auxiliary (fully expandable) macro/command when defining the cases.
+\begin{codestore}[switch02]
+\def\CaseAstring{case-A}
+\mkswitch \myCase  {I~ don't~ know:~ #1\par}
+\addcase  \myCase  {\CaseAstring} {A~ was~ used\par}
+\addcase  \myCase  {case-B} {B~ was~ used\par}
+\end{codestore}
+
+\begin{codestore}[switch02]
+\def\somemacro{case-A}
+\def\someothermacro{case-X}
+
+If B, then \myCase{case-B}
+If A, then \myCase{case-A}
+If X, then \myCase{case-X}
+
+if somemacro: \myCase{\somemacro}
+if someothermacro: \myCase{\someothermacro}
+\end{codestore}
+
+\tscode*[mkswitch]{switch02}[1]
+\tsexec{switch02}[1]
+
+To use the \tsargs[marg]{switch}, one just has to call it with \tsobj[marg]{case} as an argument. Note the possibility of using an auxiliary macro/command (which has to be fully expandable) as a \tsobj[marg]{case}.
+
+\tsdemo[mkswitch]{switch02}[2]
+
+
+
+\subsection{Expl3 ones}
+\begin{codedescribe}{\switch_new:Nn}
+\begin{codesyntax}%
+\tsobj{\switch_new:Nn} \tsmeta{switch} \tsargs[marg]{default-code}
+\end{codesyntax}
+It will create a new switch \tsobj[marg]{switch}, which will expects a single, type n, argument. In case the argument doesn't corresponds to any defined case, \tsobj[marg]{default-code} will be used. The resulting \tsobj[marg]{switch} command is expandable. 
+\end{codedescribe}
+\begin{tsremark}
+  \verb|#1| can be used in \tsobj[marg]{default-code}.
+\end{tsremark}
+
+\begin{codedescribe}{\switch_addcase:Nnn}
+\begin{codesyntax}%
+\tsobj{\switch_addcase:Nn} \tsmeta{switch} \tsargs[marg]{case,code}
+\end{codesyntax}
+It will add a \tsobj[marg]{case} to a previously defined \tsmeta{switch} and associates \tsobj[marg]{code} with it. \tsobj[marg]{case} will be fully expanded at definition time. Once defined one can call \tsverb[verb]{\switch{case}}, which will put said \tsobj[marg]{code} in the input stream. 
+\end{codedescribe}
+
+
+\subsubsection{Example}
+
+First we create a switch, and associate a few (or more) cases. Note the possibility of using an auxiliary (fully expandable) macro/command when defining the cases.
+\begin{codestore}[switch01]
+\ExplSyntaxOn
+\def\CaseAstring{case-A}
+\switch_new:Nn \TextCase       {I~ don't~ know:~ #1\par}
+\switch_addcase:Nnn \TextCase  {\CaseAstring} {A~ was~ used\par}
+\switch_addcase:Nnn \TextCase  {case-B} {B~ was~ used\par}
+\ExplSyntaxOff
+\end{codestore}
+
+\begin{codestore}[switch01]
+\def\somemacro{case-A}
+\def\someothermacro{case-X}
+
+If B, then \TextCase{case-B}
+If A, then \TextCase{case-A}
+If X, then \TextCase{case-X}
+
+if somemacro: \TextCase{\somemacro}
+if someothermacro: \TextCase{\someothermacro}
+
+\end{codestore}
+
+\tscode*[mkswitch]{switch01}[1]
+\tsexec{switch01}[1]
+
+
+
+To use the \tsargs[marg]{switch}, one just has to call it with \tsobj[marg]{case} as an argument. Note the possibility of using an auxiliary macro/command (which has to be fully expandable) as a \tsobj[marg]{case}.
+
+\tsdemo[mkswitch]{switch01}[2]
+
+%\tscode
+%\tsdemo*[emph={draw,none},emph2={path},emph3={name},basicstyle={\scriptsize\ttfamily},numbers=left]{demoA}
+%\tsresult
+
+\printbibliography
+
+\end{document} 

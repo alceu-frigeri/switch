@@ -12,19 +12,19 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {*1.0*} {20**/**/**}
+%% This is version {1.0} {2025/05/11}
 %%
 %% The list of files that compose this work can be found in the README.md file at
-%% https://ctan.org/pkg/<PackageNAME>
+%% https://ctan.org/pkg/mkswitch
 %%
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
 
 \ProvidesExplPackage
-    {<PackageNAME>}
-    {20**/**/**}
-    {*1.0*}
-    {<PackageNAME> <PackageDescription>}
+    {mkswitch}
+    {2025/05/11}
+    {1.0}
+    {mkswitch a constant time switch/case}
 
 %%%%%%%
 %%%
@@ -32,13 +32,13 @@
 %%% Idea being: { <pck-name> / pkg info } for each and all.
 %%%
 %%%%%%%
-\keys_define:nn { <PackageNAME> / pkg info}
+\keys_define:nn { mkswitch / pkg info}
   {
-     name        .code:n = {<PackageNAME>} ,
-     prefix      .code:n = {<PackageNAME>} ,
-     date        .code:n = {20**/**/**},
-     version     .code:n = {*1.0*} ,
-     description .code:n = {<PackageNAME> <PackageDescription>}
+     name        .code:n = {mkswitch} ,
+     prefix      .code:n = {mkswitch} ,
+     date        .code:n = {2025/05/11},
+     version     .code:n = {1.0} ,
+     description .code:n = {mkswitch a constant time switch/case}
   }
 \cs_if_exist:NF \PkgInfo 
   {
@@ -49,3 +49,45 @@
 %%%%%%%
 %%% End of cut-n-paste
 %%%%%%%
+
+%\cs_new:Npn \switch_new:Nn #1#2
+%  {
+%    \cs_new:Npn #1 ##1 
+%      {
+%        \cs_if_exist:cTF { \cs_to_str:N #1 _case_ ##1 : }
+%          { \use:c { \cs_to_str:N #1 _case_ ##1 : } }
+%          { #2 }
+%      }
+%  }
+\cs_new_protected:Npn \switch_new:Nn #1#2
+  {
+    \cs_new:Npn #1 ##1 
+      {
+        \cs_if_exist_use:cF { \cs_to_str:N #1 _case_ ##1 : }
+          { #2 }
+      }
+  }
+
+\cs_new_eq:NN \mkswitch \switch_new:Nn
+  
+\cs_new_protected:Npn \switch_addcase:Nnn #1#2#3
+  {
+    \cs_new:cpn { \cs_to_str:N #1 _case_ #2 : } {#3}
+  }
+\cs_new_eq:NN \addcase \switch_addcase:Nnn
+
+
+%%%% 
+%%%% TeX implementation
+%%%%
+%%
+%%\def\mkswitch#1#2{%
+%%  \def#1##1{\ifcsname\string#1@case@##1\endcsname\csname\string#1@case@##1\endcsname\else#2\fi}%
+%%}%
+%%\def\addcase#1#2#3{\expandafter\def\csname\string#1@case@#2\endcsname{#3}}%
+
+
+
+
+
+
