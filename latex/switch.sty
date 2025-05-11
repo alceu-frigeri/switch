@@ -15,16 +15,16 @@
 %% This is version {1.0} {2025/05/11}
 %%
 %% The list of files that compose this work can be found in the README.md file at
-%% https://ctan.org/pkg/mkswitch
+%% https://ctan.org/pkg/switch
 %%
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
 
 \ProvidesExplPackage
-    {mkswitch}
+    {switch}
     {2025/05/11}
     {1.0}
-    {mkswitch a constant time switch/case}
+    {switch a constant time switch/case}
 
 %%%%%%%
 %%%
@@ -32,13 +32,13 @@
 %%% Idea being: { <pck-name> / pkg info } for each and all.
 %%%
 %%%%%%%
-\keys_define:nn { mkswitch / pkg info}
+\keys_define:nn { switch / pkg info}
   {
-     name        .code:n = {mkswitch} ,
+     name        .code:n = {switch} ,
      prefix      .code:n = {switch} ,
      date        .code:n = {2025/05/11},
      version     .code:n = {1.0} ,
-     description .code:n = {mkswitch a constant time switch/case}
+     description .code:n = {switch a constant time switch/case}
   }
 \cs_if_exist:NF \PkgInfo 
   {
@@ -58,8 +58,7 @@
           { #2 }
       }
   }
-
-\cs_new_eq:NN \mkswitch \switch_new:Nn
+\cs_new_eq:NN \newswitch \switch_new:Nn
   
 \cs_new_protected:Npn \switch_addcase:Nnn #1#2#3
   {
@@ -71,12 +70,10 @@
 %%%% 
 %%%% TeX implementation
 %%%%
-%%
-%%\def\mkswitch#1#2{%
-%%\def#1##1{\ifcsname\string#1@case@##1\endcsname\csname\string#1@case@##1\endcsname\else#2\fi}%
-%%}%
+%%\makeatletter
+%%\def\newswitch#1#2{\def#1##1{\ifcsname\string#1@case@##1\endcsname\csname\string#1@case@##1\endcsname\else#2\fi}}%
 %%\def\addcase#1#2#3{\expandafter\def\csname\string#1@case@#2\endcsname{#3}}%
-
+%%\makeatother
 
 
 
