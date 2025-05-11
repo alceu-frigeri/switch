@@ -35,7 +35,7 @@
 \keys_define:nn { mkswitch / pkg info}
   {
      name        .code:n = {mkswitch} ,
-     prefix      .code:n = {mkswitch} ,
+     prefix      .code:n = {switch} ,
      date        .code:n = {2025/05/11},
      version     .code:n = {1.0} ,
      description .code:n = {mkswitch a constant time switch/case}
@@ -50,15 +50,6 @@
 %%% End of cut-n-paste
 %%%%%%%
 
-%\cs_new:Npn \switch_new:Nn #1#2
-%  {
-%    \cs_new:Npn #1 ##1 
-%      {
-%        \cs_if_exist:cTF { \cs_to_str:N #1 _case_ ##1 : }
-%          { \use:c { \cs_to_str:N #1 _case_ ##1 : } }
-%          { #2 }
-%      }
-%  }
 \cs_new_protected:Npn \switch_new:Nn #1#2
   {
     \cs_new:Npn #1 ##1 
@@ -82,7 +73,7 @@
 %%%%
 %%
 %%\def\mkswitch#1#2{%
-%%  \def#1##1{\ifcsname\string#1@case@##1\endcsname\csname\string#1@case@##1\endcsname\else#2\fi}%
+%%\def#1##1{\ifcsname\string#1@case@##1\endcsname\csname\string#1@case@##1\endcsname\else#2\fi}%
 %%}%
 %%\def\addcase#1#2#3{\expandafter\def\csname\string#1@case@#2\endcsname{#3}}%
 
