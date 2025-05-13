@@ -67,5 +67,9 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Change log
 
-* Version 1.0 (this)
+* Version 1.0a (this)
+    - Documentation: added a more advanced example.
+    - added a set of commands to test the existence and undefine switches.
+
+* Version 1.0
     - Initial setup.

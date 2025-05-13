@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.0} {2025/05/11}
+%% This is version {1.0a} {2025/05/11}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/switch
@@ -61,7 +61,7 @@ This package offers two commands aimed at implementing a switch/case alike comma
 \section{Introduction}
 There are many ways of implementing a switch case programming structure. Notably, one can use \tsobj{\str_case:nn} from \tsobj[pkg]{expl3}, or go over a loop using \tsobj{\pdfstrcmp}, or construct an if-then-else tower, etc.
 
-This implements a solution, somewhat based on  \cite{stackexchage:switchcase}, which (besides being simple) has the advantage of being constant time: once the cases are set up, suffice a single (internal) if (\tsobj{\ifcsname}) to select the correct code to be executed. 
+This implements a solution, based on  \cite{stackexchage:switchcase}, which (besides being simple) has the advantage of being constant time: once the cases are set up, suffice a single (internal) if (\tsobj{\ifcsname}) to select the correct code to be executed. 
 
 
 
@@ -74,7 +74,7 @@ This implements a solution, somewhat based on  \cite{stackexchage:switchcase}, w
 
 \setnewcodekey {switch} 
   {
-    keywd2={switch,new,addcase,switch,addcase},
+    keywd2={newswitch,switch_new:Nn,addcase,switch_addcase:Nnn},
     emph={TextCase,myCase},
     emph2={CaseAstring},
     codeprefix={},
@@ -93,7 +93,7 @@ Two set of commands are created, one to be used in a \tsobj[pkg]{expl3} code ré
 It will create a new switch \tsobj[marg]{switch}, which will expects a single argument. In case the argument doesn't corresponds to any defined case, \tsobj[marg]{default-code} will be used. The resulting \tsobj[marg]{switch} command is expandable, if \tsobj[marg]{default-code} and \tsobj[marg]{case-code} (added by \tsobj{\addcase}) also are. This is just an alias for \tsobj{\switch_new:Nn}
 \end{codedescribe}
 \begin{tsremark}
-  \verb|#1| can be used in \tsobj[marg]{default-code}.
+  \verb|#1| can be used in \tsobj[marg]{default-code}. An error is raised if \tsobj[marg]{switch} is already defined.
 \end{tsremark}
 
 \begin{codedescribe}{\addcase}
@@ -109,8 +109,8 @@ First we create a switch, and associate a few (or more) cases. Note the possibil
 \begin{codestore}[switch02]
 \def\CaseAstring{case-A}
 \newswitch \myCase  {I~ don't~ know:~ #1\par}
-\addcase  \myCase  {\CaseAstring} {A~ was~ used\par}
-\addcase  \myCase  {case-B} {B~ was~ used\par}
+\addcase   \myCase  {\CaseAstring} {A~ was~ used\par}
+\addcase   \myCase  {case-B}       {B~ was~ used\par}
 \end{codestore}
 
 \begin{codestore}[switch02]
@@ -141,7 +141,7 @@ To use the \tsobj[marg]{switch}, one just has to call it with \tsobj[marg]{case}
 It will create a new switch \tsobj[marg]{switch}, which will expects a single, type n, argument. In case the argument doesn't corresponds to any defined case, \tsobj[marg]{default-code} will be used. The resulting \tsobj[marg]{switch} command is expandable, if \tsobj[marg]{default-code} and \tsobj[marg]{case-code} (added by \tsobj{\switch_addcase:Nnn}) also are. 
 \end{codedescribe}
 \begin{tsremark}
-  \verb|#1| can be used in \tsobj[marg]{default-code}.
+  \verb|#1| can be used in \tsobj[marg]{default-code}.  An error is raised if \tsobj[marg]{switch} is already defined.
 \end{tsremark}
 
 \begin{codedescribe}{\switch_addcase:Nnn}
@@ -151,6 +151,21 @@ It will create a new switch \tsobj[marg]{switch}, which will expects a single, t
 It will add a \tsobj[marg]{case} to a previously defined \tsmeta{switch} and associates \tsobj[marg]{case-code} with it. \tsobj[marg]{case} will be fully expanded at definition time. Once defined one can call \tsverb[verb]{\switch{case}}, which will put said \tsobj[marg]{case-code} in the input stream. 
 \end{codedescribe}
 
+\begin{codedescribe}[code,new=2025-05-13,EXP]{\switch_if_exist:NTF,\switch_if_case_exist:NnTF}
+\begin{codesyntax}%
+\tsobj{\switch_if_exist:NTF} \tsmeta{switch} \tsargs[marg]{if-true,if-false} 
+\tsobj{\switch_if_case_exist:NnTF} \tsmeta{switch} \tsargs[marg]{case,if-true,if-false}
+\end{codesyntax}
+Tests if the \tsobj[marg]{switch}, or \tsobj[marg]{case}, are defined or not. It doesn't test if they are really a \tsobj[marg]{switch}/\tsobj[marg]{case}.
+\end{codedescribe}
+
+\begin{codedescribe}[code,new=2025-05-13]{\switch_undefine:N,\switch_case_undefine:Nn}
+\begin{codesyntax}%
+\tsobj{\switch_undefine:N} \tsmeta{switch}
+\tsobj{\switch_case_undefine:Nn} \tsmeta{switch} \tsargs[marg]{case}
+\end{codesyntax}
+Undefine the \tsobj[marg]{switch} and/or specific \tsobj[marg]{case}. Please note, when undefining a \tsobj[marg]{switch}, the \tsverb[verb]{\csname} associated with the cases aren't undefined (if needed, they have to be undefined one by one).
+\end{codedescribe}
 
 \subsubsection{Example}
 
@@ -158,7 +173,7 @@ First we create a switch, and associate a few (or more) cases. Note the possibil
 \begin{codestore}[switch01]
 \ExplSyntaxOn
 \def\CaseAstring{case-A}
-\switch_new:Nn \TextCase       {I~ don't~ know:~ #1\par}
+\switch_new:Nn      \TextCase  {I~ don't~ know:~ #1\par}
 \switch_addcase:Nnn \TextCase  {\CaseAstring} {A~ was~ used\par}
 \switch_addcase:Nnn \TextCase  {case-B} {B~ was~ used\par}
 \ExplSyntaxOff
@@ -167,11 +182,9 @@ First we create a switch, and associate a few (or more) cases. Note the possibil
 \begin{codestore}[switch01]
 \def\somemacro{case-A}
 \def\someothermacro{case-X}
-
 If B, then \TextCase{case-B}
 If A, then \TextCase{case-A}
 If X, then \TextCase{case-X}
-
 if somemacro: \TextCase{\somemacro}
 if someothermacro: \TextCase{\someothermacro}
 
@@ -182,12 +195,72 @@ if someothermacro: \TextCase{\someothermacro}
 
 To use the \tsobj[marg]{switch}, one just has to call it with \tsobj[marg]{case} as an argument. Note the possibility of using an auxiliary macro/command (which has to be fully expandable) as a \tsobj[marg]{case}.
 
+
 \tsdemo[switch]{switch01}[2]
 
-%\tscode
-%\tsdemo*[emph={draw,none},emph2={path},emph3={name},basicstyle={\scriptsize\ttfamily},numbers=left]{demoA}
-%\tsresult
+\section{Advanced Use}
+Since the resulting \tsobj[marg]{switch} is fully expandable (if the provided \tsobj[marg]{case-code}s also are), one can design the \tsobj[marg]{case-code}s to absorb one or more parameter/tokens.
+
+\begin{tsremark}[{\color{red}Careful:}]
+  make sure that all \tsobj[marg]{case-code}s absorb the same number of parameters, to avoid ``leftovers'' or tricky errors.
+\end{tsremark}
+
+For instance, note the use of \tsobj{\@gobble} to absorb an unused parameter, or how \tsobj{\cmdY} is defined (with two parameters) then used with a ``fixed one''. The resulting command, \tsobj{\TCase}, absorbs 2 tokens/parameters:
+
+\begin{codestore}[switch03]
+\NewDocumentCommand \cmdX{m}   {I got #1}
+\NewDocumentCommand \cmdY{mm}  {Two: #1 and #2}
+\NewDocumentCommand \Astring{} {case-A}
+
+\makeatletter
+\newswitch \TCase       {I~ don't~ know:~ #1 \@gobble}
+\makeatother
+\addcase \TCase  {\Astring} {\cmdY{A~ given}}
+\addcase \TCase  {case-B} {B~ was~ used. \cmdX}
+\end{codestore}
+
+\begin{codestore}[switch03]
+If B, then \TCase{case-B}{extra-B}\par
+If A, then \TCase{case-A}{extra-A}\par
+If X, then \TCase{case-X}{extra-X}\par
+\end{codestore}
+
+\tscode*[switch,emph={TCase},emph2={cmdX,cmdY,@gobble}]{switch03}[1]
+\tsexec{switch03}[1]
+
+
+
+\tsdemo[switch,emph={TCase},emph2={cmdX,cmdY,@gobble}]{switch03}[2]
+
+Needless to say, the same applies under \tsobj[pkg]{expl3}.
+
+
+\begin{codestore}[switch04]
+\ExplSyntaxOn
+\cs_new:Npn \__cmdX:n   #1   {I~ got~ #1}
+\cs_new:Npn \__cmdY:nn  #1#2 {Two:~ #1~ and~ #2}
+\tl_new:N   \l__case_tl 
+\tl_set:Nn  \l__case_tl {case-A}
+
+\switch_new:Nn      \TxCase  {I~ don't~ know:~ #1 \use_none:n}
+\switch_addcase:Nnn \TxCase  {\l__case_tl} {\__cmdY:nn{A~ given}}
+\switch_addcase:Nnn \TxCase  {case-B} {B~ was~ used.~ \__cmdX:n}
+\ExplSyntaxOff
+\end{codestore}
+
+\begin{codestore}[switch04]
+If B, then \TxCase{case-B}{extra-B}\par
+If A, then \TxCase{case-A}{extra-A}\par
+If X, then \TxCase{case-X}{extra-X}\par
+\end{codestore}
+
+\tscode*[switch,emph={TxCase},emph2={cmdX,cmdY,use_none:n}]{switch04}[1]
+\tsexec{switch04}[1]
+
+\tsdemo[switch,emph={TxCase},emph2={cmdX,cmdY,@gobble}]{switch04}[2]
 
 \printbibliography
+
+
 
 \end{document} 
