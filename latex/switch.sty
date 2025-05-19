@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.1} {2025/05/13}
+%% This is version {1.1a} {2025/05/19}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/switch
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {switch}
-    {2025/05/13}
-    {1.1}
+    {2025/05/19}
+    {1.1a}
     {switch a constant time switch/case}
 
 %%%%%%%
@@ -36,8 +36,8 @@
   {
      name        .code:n = {switch} ,
      prefix      .code:n = {switch} ,
-     date        .code:n = {2025/05/13},
-     version     .code:n = {1.1} ,
+     date        .code:n = {2025/05/19},
+     version     .code:n = {1.1a} ,
      description .code:n = {switch a constant time switch/case}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -59,7 +59,7 @@
       }
   }
 \cs_new_eq:NN \newswitch \switch_new:Nn
-  
+
 \cs_new_protected:Npn \switch_addcase:Nnn #1#2#3
   {
     \cs_new:cpn { \cs_to_str:N #1 _case_ #2 : } {#3}

@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.1} {2025/05/13}
+%% This is version {1.1a} {2025/05/19}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/switch
@@ -59,14 +59,14 @@ This package offers two commands aimed at implementing a switch/case alike comma
 \tableofcontents
 
 \section{Introduction}
-There are many ways of implementing a switch case programming structure. Notably, one can use \tsobj{\str_case:nn} from \tsobj[pkg]{expl3}, or go over a loop using \tsobj{\pdfstrcmp}, or construct an if-then-else tower, etc.
+There are many ways to implement a switch/case alike programming structure. Notably, one can use \tsobj{\str_case:nn} from \tsobj[pkg]{expl3}, or go over a loop using \tsobj{\pdfstrcmp}, or construct an if-then-else tower, etc.
 
-This implements a solution, based on  \cite{stackexchage:switchcase}, which (besides being simple) has the advantage of being constant time: once the cases are set up, suffice a single (internal) if (\tsobj{\ifcsname}) to select the correct code to be executed. 
+This implements a solution, based on  \cite{stackexchage:switchcase}, which has the advantage, once the cases are set up, of being constant time: a single (\tsobj{\ifcsname}) is needed to select the correct code to be executed. 
 
 
 
 \begin{tsremark}
-  The implementation creates a \tsobj{\csname} for each case, and it uses (at the end) the primitive \tsobj{\ifcsname} to select the correct case.
+  The implementation creates a \tsobj{\csname} for each case, and it uses the primitive \tsobj{\ifcsname} to select the correct case.
 \end{tsremark}
 \begin{tsremark}
   The coding is done using \tsobj[pkg]{expl3}, just for the sake of readability, in the package comments one can find an implementation using just \TeX\  primitives.
@@ -138,7 +138,7 @@ To use the \tsobj[marg]{switch}, one just has to call it with \tsobj[marg]{case}
 \begin{codesyntax}%
 \tsobj{\switch_new:Nn} \tsmeta{switch} \tsargs[marg]{default-code}
 \end{codesyntax}
-It will create a new switch \tsobj[marg]{switch}, which will expects a single, type n, argument. In case the argument doesn't corresponds to any defined case, \tsobj[marg]{default-code} will be used. The resulting \tsobj[marg]{switch} command is expandable, if \tsobj[marg]{default-code} and \tsobj[marg]{case-code} (added by \tsobj{\switch_addcase:Nnn}) also are. 
+It will create a new switch \tsobj[marg]{switch}, which will, in principle, expects a single, type n, argument. In case the argument doesn't corresponds to any defined case, \tsobj[marg]{default-code} will be used. The resulting \tsobj[marg]{switch} command is expandable, if \tsobj[marg]{default-code} and \tsobj[marg]{case-code} (added by \tsobj{\switch_addcase:Nnn}) also are. 
 \end{codedescribe}
 \begin{tsremark}
   \verb|#1| can be used in \tsobj[marg]{default-code}.  An error is raised if \tsobj[marg]{switch} is already defined.
@@ -199,7 +199,7 @@ To use the \tsobj[marg]{switch}, one just has to call it with \tsobj[marg]{case}
 \tsdemo[switch]{switch01}[2]
 
 \section{Advanced Use}
-Since the resulting \tsobj[marg]{switch} is fully expandable (if the provided \tsobj[marg]{case-code}s also are), one can design the \tsobj[marg]{case-code}s to absorb one or more parameter/tokens.
+Since the resulting \tsobj[marg]{switch} is fully expandable (if the provided \tsobj[marg]{case-code}s also are), one can design the \tsobj[marg]{case-code}s to absorb  more than one parameter/tokens.
 
 \begin{tsremark}[{\color{red}Careful:}]
   make sure that all \tsobj[marg]{case-code}s absorb the same number of parameters, to avoid ``leftovers'' or tricky errors.
