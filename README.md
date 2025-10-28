@@ -66,8 +66,11 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ## Change log
+* Version 1.1b (this)
+    - switching over pkginfograb package's info
+    - a bit of code optimization.
 
-* Version 1.1a (this)
+* Version 1.1a 
     - Documentation typos.
 
 * Version 1.1 
